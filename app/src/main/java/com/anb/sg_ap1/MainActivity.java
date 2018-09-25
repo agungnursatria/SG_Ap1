@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -13,38 +12,36 @@ import android.widget.Toast;
 
 import com.anb.sg_ap1.model.User;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener{
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 
+public class MainActivity extends AppCompatActivity {
+
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
+
+    @BindView(R.id.til_nama)
     TextInputLayout til_nama;
+
+    @BindView(R.id.et_umur)
     EditText et_umur;
+
+    @BindView(R.id.spinner_gender)
     Spinner spinner_gender;
+
+    @BindView(R.id.btn_process)
     Button btn_process;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        ButterKnife.bind(this);
         setSupportActionBar(toolbar);
-
-        // Inisialiasi pengenalan widget pada layout
-        til_nama = findViewById(R.id.til_nama);
-        et_umur = findViewById(R.id.et_umur);
-        spinner_gender = findViewById(R.id.spinner_gender);
-        btn_process = findViewById(R.id.btn_process);
-
-        btn_process.setOnClickListener(this);
     }
 
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()){
-            case R.id.btn_process :
-                validateData();
-                break;
-        }
-    }
-
+    @OnClick(R.id.btn_process)
     void validateData(){
         if (til_nama.getEditText() != null){
             // Jika Nama dan Umur tidak kosong
@@ -63,9 +60,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void processData(User user) {
         Intent intent = new Intent(this, ListActivity.class);
-        intent.putExtra("nama", user.nama);
-        intent.putExtra("umur", user.umur);
-        intent.putExtra("gender", user.gender);
+        intent.putExtra("user", user);
         startActivity(intent);
     }
 }
