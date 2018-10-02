@@ -15,10 +15,16 @@ import java.util.ArrayList;
 
 public class ListUserAdapter extends RecyclerView.Adapter<ListUserVH>
 {
-    private ArrayList<User> mData;
+    public interface OnItemClickListener {
+        void onItemClick(User user);
+    }
 
-    public ListUserAdapter(ArrayList<User> mData) {
+    private ArrayList<User> mData;
+    private final OnItemClickListener listener;
+
+    public ListUserAdapter(ArrayList<User> mData, OnItemClickListener listener) {
         this.mData = mData;
+        this.listener = listener;
     }
 
     @NonNull
@@ -32,9 +38,7 @@ public class ListUserAdapter extends RecyclerView.Adapter<ListUserVH>
     @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull ListUserVH holder, int position) {
-        holder.tvNama.setText(mData.get(position).nama);
-        holder.tvUmur.setText(Integer.toString(mData.get(position).umur));
-        holder.tvGender.setText(mData.get(position).gender);
+        holder.bind(mData.get(position), listener);
     }
 
     @Override
@@ -45,12 +49,26 @@ public class ListUserAdapter extends RecyclerView.Adapter<ListUserVH>
 
 class ListUserVH extends RecyclerView.ViewHolder{
 
-    TextView tvNama, tvUmur, tvGender;
+    private TextView tvNama, tvUmur, tvGender;
 
     ListUserVH(View itemView) {
         super(itemView);
         tvNama = itemView.findViewById(R.id.tv_nama);
         tvUmur = itemView.findViewById(R.id.tv_umur);
         tvGender = itemView.findViewById(R.id.tv_gender);
+    }
+
+    @SuppressLint("SetTextI18n")
+    public void bind(final User user, final ListUserAdapter.OnItemClickListener listener){
+        tvNama.setText(user.nama);
+        tvUmur.setText("Umur: " + Integer.toString(user.umur));
+        tvGender.setText("Gender: " + user.gender);
+
+        itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                listener.onItemClick(user);
+            }
+        });
     }
 }

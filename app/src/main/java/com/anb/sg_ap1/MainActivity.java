@@ -10,6 +10,7 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.anb.sg_ap1.database.UserRepo;
 import com.anb.sg_ap1.model.User;
 
 import butterknife.BindView;
@@ -32,6 +33,8 @@ public class MainActivity extends AppCompatActivity {
 
     @BindView(R.id.btn_process)
     Button btn_process;
+
+    UserRepo repo = new UserRepo(this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,8 +62,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void processData(User user) {
+        repo.insert(user);
         Intent intent = new Intent(this, ListActivity.class);
-        intent.putExtra("user", user);
         startActivity(intent);
     }
 }
